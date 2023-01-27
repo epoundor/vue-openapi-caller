@@ -1,0 +1,21 @@
+{
+  "name": "vue-apicaller",
+  "version": "1.0.0",
+  "description": "The ultimate solution for making API calls in your Vue.js projects",
+  "main": "index.ts",
+  "scripts": {
+    "build": "run-p type-check build-only",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^4.0.4"
+  },
+  "dependencies": {
+    "axios": "^1.2.5",
+    "path-to-regexp": "^6.2.1",
+    "typescript": "^4.9.4",
+    "vue": "^3.2.45"
+  }
+}
