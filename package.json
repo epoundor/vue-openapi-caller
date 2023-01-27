@@ -1,5 +1,5 @@
 {
-  "name": "vue-apicaller",
+  "name": "vue-openai-apicaller",
   "version": "1.0.0",
   "description": "The ultimate solution for making API calls in your Vue.js projects",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "build": "run-p type-check build-only",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Epoundor Freedauss TANDA <freedausstanda@gmail.com> (https://github.com/epoudor)",
   "license": "ISC",
   "devDependencies": {
     "vite": "^4.0.4"
@@ -17,5 +17,12 @@
     "path-to-regexp": "^6.2.1",
     "typescript": "^4.9.4",
     "vue": "^3.2.45"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/epoundor/vue-apicaller"
+  },
+  "contributors": [
+    "Aimé Sagbo <> (url)"
+  ]
 }
