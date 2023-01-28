@@ -1,6 +1,6 @@
 {
   "name": "vue-openai-apicaller",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The ultimate solution for making API calls in your Vue.js projects",
   "main": "index.js",
   "scripts": {
