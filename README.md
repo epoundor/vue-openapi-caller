@@ -31,7 +31,6 @@ Additionally, the package provides a comprehensive state management system, allo
 ## **Example**
 
 ```jsx
-Copy code
 import apiCaller from 'vue-openai-apicaller'
 import declaration from './declaration.ts'
 
