@@ -22,10 +22,6 @@ Next, define the API calls you want to make using an OpenAPI declaration file. T
 
 After that, you can use the package's methods to make API calls and handle the responses:
 
-```
-
-```
-
 Additionally, the package provides a comprehensive state management system, allowing you to keep track of the progress of your API calls.
 
 ## **Example**
