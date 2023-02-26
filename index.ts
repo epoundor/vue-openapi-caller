@@ -69,7 +69,7 @@ type Option<D, Path, Method> = RequestInit & {
 } & PickDefined<{
     query: ApiParam<D, Path, Method, "query">;
     params: ApiParam<D, Path, Method, "path">;
-    body: ApiRequestBody<D, Path, Method, "application/json">;
+    data: ApiRequestBody<D, Path, Method, "application/json">;
   }>;
 
 interface Context<Response> {
@@ -116,14 +116,17 @@ export type ApiCall<D, P, M, R> = {
 
 export class ApiCAll<DeclarationPath> {
   private axiosInstance: AxiosInstance;
-  constructor(baseUrl: string = "") {
-    this.axiosInstance = axios.create({
+  constructor(
+    baseUrl: string = "",
+    axiosInstance: AxiosInstance = axios.create({
       baseURL: baseUrl,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-    });
+    })
+  ) {
+    this.axiosInstance = axiosInstance;
   }
 
   /**
