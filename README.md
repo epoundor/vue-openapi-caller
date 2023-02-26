@@ -1,13 +1,13 @@
-# **OpenAI API Wrapper for Vue.js**
+# **OpenAPI Wrapper for Vue.js**
 
-This package allows you to easily make calls to OpenAI API using Vue.js. It provides a simple and intuitive interface for making API calls and follows the best practices for integrating with the Vue.js lifecycle.
+This package allows you to easily make calls to OpenAPI using Vue.js. It provides a simple and intuitive interface for making API calls and follows the best practices for integrating with the Vue.js lifecycle.
 
 ## **Installation**
 
 To install the package, simply run the following command:
 
 ```bash
-npm i vue-openai-apicaller
+npm i vue-openapi-apicaller
 ```
 
 ## **Usage**
@@ -15,10 +15,10 @@ npm i vue-openai-apicaller
 To use the package, first import it into your Vue component:
 
 ```jsx
-import apiCaller from "vue-openai-apicaller";
+import apiCaller from "vue-openapi-apicaller";
 ```
 
-Next, define the API calls you want to make using an OpenAI declaration file. This file should contain the parameters for your API calls and the actions to be taken upon success or failure.
+Next, define the API calls you want to make using an OpenAPI declaration file. This file should contain the parameters for your API calls and the actions to be taken upon success or failure.
 
 After that, you can use the package's methods to make API calls and handle the responses:
 
@@ -30,33 +30,72 @@ Additionally, the package provides a comprehensive state management system, allo
 
 ## **Example**
 
-```jsx
-import apiCaller from 'vue-openai-apicaller'
-import declaration from './declaration.ts'
+```ts
+import apiCAll from "vue-openapi-apicaller";
+import declaration from "./declaration.ts";
+import axios from "axios";
+import { paths } from "./type";
 
-export default {
-  data() {
-    return {
-      response: null,
-      error: null,
-      isLoading: false,
-    }
+const baseURL = "/";
+const axiosInstance = axios.create({
+  baseURL: baseURL,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
   },
-  methods: {
-    makeApiCall() {
-        this.isLoading = true
-        openAI.makeApiCall(declarationFile)
-        .then(response => {
-          this.response = response
-        }).catch(error => {
-          this.error = error
-        }).finally(() => {
-          this.isLoading = false
-        });
-    }
-  }
-}
+});
+const api = new ApiCAll<paths>(baseURL, axiosInstance);
 
+const {
+  data, //To handle all server response
+  error, // To handle only error
+  execute, // To execute the ajax request
+  isAborted, // True when request is aborted
+  isFinished, // True when request is finish
+  isLoading, // True when request is loading
+  registerSuccessCallback, // Hook to handle success response
+  registerErrorCallback, // Hook to handle error response
+  registerFailureCallback, // Hook to handle failure response
+} = api.apiCall("/api/v1/user/{user_id}", {
+  method: "get",
+});
+```
+
+## **Recommended Usage**
+
+Use hooks
+
+```ts
+// api/users
+const api = new ApiCAll<paths>(baseURL, axiosInstance);
+
+export function useFetchUsers() {
+  return api.apiCall("/api/v1/user/", { method: "get" });
+}
+```
+
+```html
+<script setup>
+  import { useFetchPosts } from "./api/users";
+  import { onMounted } from "vue";
+  const {
+    execute: fetchUsers,
+    registerErrorCallback: onError,
+    registerSuccessCallback: onSuccess,
+  } = useFecthUsers();
+
+  onError((error) => {
+    console.error("Something went wrong", error);
+  });
+
+  onSuccess((users) => {
+    console.log("Users", users);
+  });
+
+  onMounted(() => {
+    fetchUsers();
+  });
+</script>
 ```
 
 ## **Features**
@@ -64,7 +103,7 @@ export default {
 - Simple and intuitive interface for making API calls
 - Automatically handles errors and provides detailed information about any failures
 - Comprehensive state management system
-- Allows you to define your API calls using an easy-to-use OpenAI declaration file
+- Allows you to define your API calls using an easy-to-use OpenAPI declaration file
 
 ## **Note**
 
