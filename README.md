@@ -15,7 +15,7 @@ npm i vue-openapi-apicaller
 To use the package, first import it into your Vue component:
 
 ```jsx
-import apiCaller from "vue-openapi-apicaller";
+import apiCaller from "vue-openapi-caller";
 ```
 
 Next, define the API calls you want to make using an OpenAPI declaration file. This file should contain the parameters for your API calls and the actions to be taken upon success or failure.
