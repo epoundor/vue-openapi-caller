@@ -7,7 +7,7 @@ This package allows you to easily make calls to OpenAPI using Vue.js. It provide
 To install the package, simply run the following command:
 
 ```bash
-npm i vue-openapi-apicaller
+npm i vue-openapi-caller
 ```
 
 ## **Usage**
@@ -27,7 +27,7 @@ Additionally, the package provides a comprehensive state management system, allo
 ## **Example**
 
 ```ts
-import apiCAll from "vue-openapi-apicaller";
+import apiCAll from "vue-openapi-caller";
 import declaration from "./declaration.ts";
 import axios from "axios";
 import { paths } from "./type";
@@ -66,7 +66,7 @@ Use hooks
 const api = new ApiCAll<paths>(baseURL, axiosInstance);
 
 export function useFetchUsers() {
-  return api.apiCall("/api/v1/user/", { method: "get" });
+  return api.vFetcher("/api/v1/user/", { method: "get" });
 }
 ```
 

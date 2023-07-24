@@ -1,22 +1,24 @@
 {
   "name": "vue-openapi-caller",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The ultimate solution for making API calls in your Vue.js projects",
   "main": "index.js",
   "scripts": {
-    "build": "run-p type-check build-only",
+    "build": "tsc ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Epoundor Freedauss TANDA <freedausstanda@gmail.com> (https://github.com/epoundor)",
   "license": "ISC",
   "peerDependencies": {
-    "vite": "^4.0.4",
-    "axios": "^1.2.5"
+    "axios": "^1.2.5",
+    "vite": "^4.0.4"
   },
   "dependencies": {
     "path-to-regexp": "^6.2.1",
-    "typescript": "^4.9.4",
     "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
   },
   "repository": {
     "type": "git",

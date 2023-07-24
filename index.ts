@@ -1,4 +1,10 @@
-import type { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
+import type {
+  AxiosHeaders,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
+
 import axios, {
   AxiosError,
   type AxiosInstance,
@@ -57,7 +63,7 @@ type ApiParam<D, Path, Method, Parameter> = Get<
   D,
   [Path, Method, "parameters", Parameter]
 >;
-type ApiRequestBody<D, Path, Method, Type = "application/json"> = Get<
+type ApiRequestBody<D, Path, Method, Type = "application/json" > = Get<
   D,
   [Path, Method, "requestBody", "content", Type]
 >;
@@ -69,7 +75,8 @@ type Option<D, Path, Method> = RequestInit & {
 } & PickDefined<{
     query: ApiParam<D, Path, Method, "query">;
     params: ApiParam<D, Path, Method, "path">;
-    data: ApiRequestBody<D, Path, Method, "application/json">;
+    data: ApiRequestBody<D, Path, Method, "multipart/form-data"> |
+      ApiRequestBody<D, Path, Method, "application/json">;
   }>;
 
 interface Context<Response> {
@@ -115,10 +122,11 @@ export type ApiCall<D, P, M, R> = {
 };
 
 export class ApiCAll<DeclarationPath> {
-  private axiosInstance: AxiosInstance;
+  public axiosInstance: AxiosInstance;
   constructor(
     baseUrl: string = "",
     axiosInstance: AxiosInstance = axios.create({
+      withCredentials: true,
       baseURL: baseUrl,
       headers: {
         "Content-Type": "application/json",
@@ -138,11 +146,13 @@ export class ApiCAll<DeclarationPath> {
    * It takes an AxiosError object as its parameter, and returns a promise that resolves to an AxiosError object.
    */
   registerRequestInterceptor(
-    onFulfilled:
+    onFulfilled?:
       | ((
-          value: AxiosRequestConfig
-        ) => AxiosRequestConfig | Promise<AxiosRequestConfig>)
-      | undefined,
+          value: InternalAxiosRequestConfig<any>
+        ) =>
+          | InternalAxiosRequestConfig<any>
+          | Promise<InternalAxiosRequestConfig<any>>)
+      | null,
     onError: ((error: AxiosError) => Promise<AxiosError>) | undefined = (
       error: AxiosError
     ) => Promise.reject(error)
@@ -177,13 +187,18 @@ export class ApiCAll<DeclarationPath> {
    *The function then defines an execute() method that takes an optional config object of type Omit<Option<Path, Method>, "method" | "immediate">. This method generates a URL using the compile() function and sets up the configuration options for the axios request, including the URL, method, data, headers, and onUploadProgress event. It then sets the context's isLoading property to true and makes the request using the axiosInstance. If the request is successful, it will call the success callbacks and update the context object with the response data and status code. If there's an error, it will call the failure or error callbacks and update the context object with the error.
    *The function also includes four methods for registering callbacks for each event: registerSuccessCallback(), registerFailureCallback(), registerErrorCallback(), and registerUploadProgressCallback().
    */
-  apiCall<
+  vFetcher<
     Response,
     Path extends keyof DeclarationPath,
     Method extends MethodsForPath<Path, DeclarationPath>
   >(
     url: Path,
-    options: Option<DeclarationPath, Path, Method> & { method: Method }
+    options: {
+      body?: {};
+      headers?: {};
+      params?: Record<string, any>;
+      method: Method;
+    }
     //   options: Partial<Option<PayloadType>> & { method: HttpMethod }
   ): ApiCall<DeclarationPath, Path, Method, Response> {
     const successCallbacks: Function[] = [];
@@ -217,7 +232,10 @@ export class ApiCAll<DeclarationPath> {
 
       const stringifiedRouteParams: Record<string, string> = {};
 
-      const paramsToUse = config?.params || options.params || {};
+      const paramsToUse =
+        (config as unknown as { params: Record<string, any> })?.params ||
+        options.params ||
+        {};
 
       const routeParamsKeys = Object.keys(paramsToUse);
 
@@ -228,9 +246,19 @@ export class ApiCAll<DeclarationPath> {
       }
 
       const requestConfig: AxiosRequestConfig = {
-        url: generateUrl(stringifiedRouteParams || config?.params),
-        method: options.method || "GET",
-        params: config?.params || options.params || {},
+        url: generateUrl(
+          stringifiedRouteParams ||
+            (config as unknown as { params: Record<string, any> })?.params
+        ),
+        method: String(options.method) || "GET",
+
+        params:
+          {
+            ...(config as unknown as { params: Record<string, any> })?.params,
+            ...(config as unknown as { query: Record<string, any> })?.query,
+          } ||
+          options.params ||
+          {},
         data: options.body || {},
         headers: options.headers || {},
         onUploadProgress(progressEvent: AxiosProgressEvent) {
@@ -240,11 +268,18 @@ export class ApiCAll<DeclarationPath> {
         },
       };
 
-      if (config?.data) {
+      if (
+        config &&
+        (config as unknown as { data: Record<string, any> })?.data
+      ) {
         if (requestConfig.method?.toLowerCase() === "get") {
-          requestConfig.params = config.data;
+          requestConfig.params = (
+            config as unknown as { data: Record<string, any> }
+          ).data;
         } else {
-          requestConfig.data = config.data;
+          requestConfig.data = (
+            config as unknown as { data: Record<string, any> }
+          ).data;
         }
       }
 
