@@ -46,9 +46,9 @@ const {
   data, //To handle all server response
   error, // To handle only error
   execute, // To execute the ajax request
-  isAborted, // True when request is aborted
-  isFinished, // True when request is finish
-  isLoading, // True when request is loading
+  isAborted, // true when request is aborted
+  isFinished, // true when request is finish
+  isLoading, // true when request is loading
   registerSuccessCallback, // Hook to handle success response
   registerErrorCallback, // Hook to handle error response
   registerFailureCallback, // Hook to handle failure response
